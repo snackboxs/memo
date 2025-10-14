@@ -1,8 +1,6 @@
 import {
    AppBar,
-   Toolbar, useScrollTrigger,
-   Slide,
-   IconButton,
+   Toolbar, IconButton,
    Container,
    Box,
    Button
@@ -17,12 +15,8 @@ import Logo from "../components/Logo";
 import AccountMenu from "../components/AccountMenu";
 import MyMenu from "../components/MyMenu";
 
-interface Props {
-   window?: () => Window;
-   children?: React.ReactElement<unknown>;
-}
 
-export default function MyAppBar(props: Props) {
+export default function MyAppBar() {
    const [menuAnchorlEl, setMenuAnchorElNav] = useState<null | HTMLElement>(
       null
    );
@@ -48,7 +42,7 @@ export default function MyAppBar(props: Props) {
    return (
          <AppBar
             sx={{
-               backgroundColor: "rgba(0,0,0)",
+               // backgroundColor: "rgba(0,0,0)",
                boxShadow: "none",
                zIndex: (theme) => theme.zIndex.drawer + 1,
             }}

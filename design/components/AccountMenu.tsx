@@ -1,5 +1,12 @@
 import { Menu, MenuItem, Divider, ListItemIcon, Avatar } from "@mui/material";
-import { PersonAdd, Settings, Logout } from "@mui/icons-material";
+import {
+   PersonAdd,
+   Settings,
+   Logout,
+   LightMode,
+   DarkMode,
+} from "@mui/icons-material";
+import { useAppContext } from "../src/AppProvider";
 
 interface AccountMenuProps {
    accountAnchorEl: null | HTMLElement;
@@ -9,6 +16,11 @@ export default function AccountMenu({
    accountAnchorEl,
    handleCloseAccountMenu,
 }: AccountMenuProps) {
+   const { mode, setMode } = useAppContext();
+   console.log(mode);
+   if (!mode) {
+      return null;
+   }
    return (
       <Menu
          anchorEl={accountAnchorEl}
@@ -56,6 +68,16 @@ export default function AccountMenu({
                <PersonAdd fontSize="small" />
             </ListItemIcon>
             Add another account
+         </MenuItem>
+         <MenuItem
+            onClick={() =>
+               mode === "light" ? setMode("dark") : setMode("light")
+            }
+         >
+            <ListItemIcon>
+               {mode === "light" ? <DarkMode /> : <LightMode />}
+            </ListItemIcon>
+            {mode === "light" ? "Dark Mode" : "Light Mode"}
          </MenuItem>
          <MenuItem onClick={handleCloseAccountMenu}>
             <ListItemIcon>

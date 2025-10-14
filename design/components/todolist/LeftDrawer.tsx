@@ -18,7 +18,7 @@ import { useState } from "react";
 import DialogBox from "./DialogBox";
 
 export default function LeftDrawer() {
-   const { setOpenDialogBox } = useAppContext();
+   const { setOpenDialogBox, setCurrentNote } = useAppContext();
    const [items, setItems] = useState(["Food", "Health", "Learn"]);
 
    return (
@@ -45,9 +45,9 @@ export default function LeftDrawer() {
                </List>
                <Divider />
                <List>
-                  {items.map((text, index) => (
+                  {items.map((text) => (
                      <ListItem key={text} disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={() => setCurrentNote(text.toLocaleLowerCase())}>
                            <ListItemText
                               primary={text}
                               sx={{ textAlign: "center" }}

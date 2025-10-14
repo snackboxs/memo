@@ -3,9 +3,12 @@ import { Add as AddIcon } from "@mui/icons-material";
 import LeftDrawer from "../../components/todolist/LeftDrawer";
 import { createTheme } from "@mui/material/styles";
 import TodolistTable from "../../components/todolist/TodolistTable";
-import EnhancedTable from "../../components/todolist/muiTable";
+import AddNewTodolistData from "../../components/todolist/AddNewTodolistData";
+import { useAppContext } from "../../src/AppProvider";
 
 export default function Todolist() {
+   const { openAddNewTodolistDataBox, setOpenAddNewTodolistDataBox } =
+      useAppContext();
    const theme = createTheme({
       palette: {
          primary: {
@@ -17,12 +20,15 @@ export default function Todolist() {
       <Box sx={{ display: "flex" }}>
          <LeftDrawer />
          <TodolistTable />
-         {/* <EnhancedTable /> */}
+         <AddNewTodolistData />
          <ThemeProvider theme={theme}>
             <Fab
                color="primary"
                aria-label="add"
                sx={{ position: "fixed", bottom: 30, right: 30 }}
+               onClick={() =>
+                  setOpenAddNewTodolistDataBox(!openAddNewTodolistDataBox)
+               }
             >
                <AddIcon />
             </Fab>

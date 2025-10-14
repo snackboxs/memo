@@ -10,6 +10,7 @@ import {
    Box,
    IconButton,
    Divider,
+   Typography,
 } from "@mui/material";
 import {
    Delete as DeleteIcon,
@@ -17,43 +18,62 @@ import {
    CheckBoxOutlineBlank,
 } from "@mui/icons-material";
 import { useState } from "react";
+import { useAppContext } from "../../src/AppProvider";
 
 interface Data {
    id: number;
    note: string;
    date: string;
    done: boolean;
+   noteType: string;
 }
 
 function createData(
    id: number,
    note: string,
    date: string,
-   done: boolean
+   done: boolean,
+   noteType: string
 ): Data {
    return {
       id,
       note,
       date,
       done,
+      noteType,
    };
 }
 const rows = [
-   createData(1, "note1", "12-8-100", false),
-   createData(2, "note2", "12-8-100", false),
-   createData(3, "note3", "12-8-100", true),
-   createData(4, "note4", "12-8-100", false),
+   createData(1, "note1", "12-8-100", false, "food"),
+   createData(2, "note2", "12-8-100", false, "food"),
+   createData(3, "note3", "12-8-100", true, "study"),
+   createData(4, "note4", "12-8-100", false, "food"),
+   createData(4, "note4", "12-8-100", false, "study"),
 ];
 
 export default function TodolistTable() {
    const [finished, setFinished] = useState(rows);
+   const { currentNote } = useAppContext();
 
+   const remove = (id: number) => {
+      setFinished(() => finished.filter((row) => row.id !== id));
+   };
    const toggle = (id: number) => {
-      console.log(id);
-      setFinished((rows) =>
-         rows.map((row) => (row.id === id ? { ...row, done: !row.done } : row))
+      setFinished(() =>
+         finished.map((row) =>
+            row.id === id ? { ...row, done: !row.done } : row
+         )
       );
-      console.log;
+   };
+   const toggleAll = () => {
+      setFinished(
+         finished.map((row) =>
+            row.done === false ? { ...row, done: !row.done } : row
+         )
+      );
+   };
+   const removeAll = () => {
+      setFinished(finished.filter((row) => row.done === false));
    };
    return (
       <Box sx={{ width: "100%" }}>
@@ -64,7 +84,7 @@ export default function TodolistTable() {
                   <TableHead>
                      <TableRow>
                         <TableCell padding="checkbox">
-                           <IconButton>
+                           <IconButton onClick={() => toggleAll()}>
                               <CheckBoxOutlineBlank />
                            </IconButton>
                         </TableCell>
@@ -73,7 +93,7 @@ export default function TodolistTable() {
                         </TableCell>
                         <TableCell sx={{ textAlign: "center" }}>Time</TableCell>
                         <TableCell padding="checkbox">
-                           <IconButton>
+                           <IconButton onClick={() => removeAll()}>
                               <DeleteIcon />
                            </IconButton>
                         </TableCell>
@@ -81,15 +101,11 @@ export default function TodolistTable() {
                   </TableHead>
                   <TableBody>
                      {finished
+                        .filter((rows) => rows.noteType === currentNote)
                         .filter((row) => !row.done)
                         .map((row) => {
                            return (
-                              <TableRow
-                                 key={row.id}
-                                 hover
-                                 onClick={() => toggle(row.id)}
-                                 sx={{ cursor: "pointer" }}
-                              >
+                              <TableRow key={row.id} hover>
                                  <TableCell padding="checkbox">
                                     <IconButton
                                        onClick={(e) => {
@@ -105,7 +121,7 @@ export default function TodolistTable() {
                                     {row.date}
                                  </TableCell>
                                  <TableCell padding="checkbox">
-                                    <IconButton>
+                                    <IconButton onClick={() => remove(row.id)}>
                                        <DeleteIcon />
                                     </IconButton>
                                  </TableCell>
@@ -116,23 +132,27 @@ export default function TodolistTable() {
                </Table>
             </TableContainer>
          </Paper>
-         <Table sx={{ marginTop: 10 }}>
+         <Typography sx={{ marginTop: 10, paddingLeft: 1, color: "gray" }}>
+            Done
+         </Typography>
+         <Divider />
+         <Table>
             <TableBody>
                {finished
+                  .filter((rows) => rows.noteType === currentNote)
                   .filter((row) => row.done)
                   .map((row) => {
                      return (
                         <TableRow
                            key={row.id}
-                           hover
                            sx={{
                               backgroundColor: "inherit",
-                              cursor: "pointer"
                            }}
-                           onClick={() => toggle(row.id)}
+                           // onClick={() => toggle(row.id)}
                         >
                            <TableCell padding="checkbox">
                               <IconButton
+                                 sx={{ color: "gray" }}
                                  onClick={(e) => {
                                     e.stopPropagation(); // prevent row click
                                     toggle(row.id);
@@ -141,12 +161,19 @@ export default function TodolistTable() {
                                  <CheckBox />
                               </IconButton>
                            </TableCell>
-                           <TableCell>{row.note}</TableCell>
-                           <TableCell sx={{ textAlign: "center" }}>
+                           <TableCell sx={{ color: "gray" }}>
+                              {row.note}
+                           </TableCell>
+                           <TableCell
+                              sx={{ textAlign: "center", color: "gray" }}
+                           >
                               {row.date}
                            </TableCell>
                            <TableCell padding="checkbox">
-                              <IconButton>
+                              <IconButton
+                                 sx={{ color: "gray" }}
+                                 onClick={() => remove(row.id)}
+                              >
                                  <DeleteIcon />
                               </IconButton>
                            </TableCell>
