@@ -21,7 +21,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
    },
 }));
 
-export default function DialogBox() {
+export default function CashnoteDialogBox() {
    const { openDialogBox, setOpenDialogBox } = useAppContext();
 
    return (

@@ -298,20 +298,20 @@ export default function EnhancedTable() {
       setSelected(newSelected);
    };
 
-   // const handleChangePage = (event: unknown, newPage: number) => {
-   //    setPage(newPage);
-   // };
+   const handleChangePage = (event: unknown, newPage: number) => {
+      setPage(newPage);
+   };
 
-   // const handleChangeRowsPerPage = (
-   //    event: React.ChangeEvent<HTMLInputElement>
-   // ) => {
-   //    setRowsPerPage(parseInt(event.target.value, 10));
-   //    setPage(0);
-   // };
+   const handleChangeRowsPerPage = (
+      event: React.ChangeEvent<HTMLInputElement>
+   ) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+   };
 
-   // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-   //    setDense(event.target.checked);
-   // };
+   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setDense(event.target.checked);
+   };
 
    // Avoid a layout jump when reaching the last page with empty rows.
    const emptyRows =

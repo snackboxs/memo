@@ -5,7 +5,6 @@ import {
    TableBody,
    TableCell,
    TableRow,
-   Toolbar,
    Paper,
    Box,
    IconButton,
@@ -17,67 +16,36 @@ import {
    CheckBox,
    CheckBoxOutlineBlank,
 } from "@mui/icons-material";
-import { useState } from "react";
 import { useAppContext } from "../../src/AppProvider";
-
-interface Data {
-   id: number;
-   note: string;
-   date: string;
-   done: boolean;
-   noteType: string;
-}
-
-function createData(
-   id: number,
-   note: string,
-   date: string,
-   done: boolean,
-   noteType: string
-): Data {
-   return {
-      id,
-      note,
-      date,
-      done,
-      noteType,
-   };
-}
-const rows = [
-   createData(1, "note1", "12-8-100", false, "food"),
-   createData(2, "note2", "12-8-100", false, "food"),
-   createData(3, "note3", "12-8-100", true, "study"),
-   createData(4, "note4", "12-8-100", false, "food"),
-   createData(4, "note4", "12-8-100", false, "study"),
-];
+import { useTodolistContext } from "../../pages/todolist/TodolistProvider";
 
 export default function TodolistTable() {
-   const [finished, setFinished] = useState(rows);
+   // const [finished, setFinished] = useState(rows);
    const { currentNote } = useAppContext();
+   const {rows, setRows} = useTodolistContext();
 
    const remove = (id: number) => {
-      setFinished(() => finished.filter((row) => row.id !== id));
+      setRows(() => rows.filter((row) => row.id !== id));
    };
    const toggle = (id: number) => {
-      setFinished(() =>
-         finished.map((row) =>
+      setRows(() =>
+         rows.map((row) =>
             row.id === id ? { ...row, done: !row.done } : row
          )
       );
    };
    const toggleAll = () => {
-      setFinished(
-         finished.map((row) =>
+      setRows(
+         rows.map((row) =>
             row.done === false ? { ...row, done: !row.done } : row
          )
       );
    };
    const removeAll = () => {
-      setFinished(finished.filter((row) => row.done === false));
+      setRows(rows.filter((row) => row.done === false));
    };
    return (
       <Box sx={{ width: "100%" }}>
-         <Toolbar />
          <Paper>
             <TableContainer>
                <Table stickyHeader aria-label="customized table" size="medium">
@@ -89,7 +57,7 @@ export default function TodolistTable() {
                            </IconButton>
                         </TableCell>
                         <TableCell sx={{ textAlign: "center" }}>
-                           Notes
+                           Todolist
                         </TableCell>
                         <TableCell sx={{ textAlign: "center" }}>Time</TableCell>
                         <TableCell padding="checkbox">
@@ -100,7 +68,7 @@ export default function TodolistTable() {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {finished
+                     {rows
                         .filter((rows) => rows.noteType === currentNote)
                         .filter((row) => !row.done)
                         .map((row) => {
@@ -138,7 +106,7 @@ export default function TodolistTable() {
          <Divider />
          <Table>
             <TableBody>
-               {finished
+               {rows
                   .filter((rows) => rows.noteType === currentNote)
                   .filter((row) => row.done)
                   .map((row) => {

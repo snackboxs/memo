@@ -12,7 +12,7 @@ import {
 
 import { Add as AddIcon } from "@mui/icons-material";
 import { useAppContext } from "../../src/AppProvider";
-import DialogBox from "./DialogBox";
+import DialogBox from "./CashnoteDialogBox";
 import { useTodolistContext } from "../../pages/todolist/TodolistProvider";
 
 export default function LeftDrawer() {
