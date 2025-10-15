@@ -17,7 +17,6 @@ export default function AccountMenu({
    handleCloseAccountMenu,
 }: AccountMenuProps) {
    const { mode, setMode } = useAppContext();
-   console.log(mode);
    if (!mode) {
       return null;
    }

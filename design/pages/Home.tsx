@@ -1,14 +1,15 @@
-import { Box } from "@mui/material";
+import { Box, Toolbar } from "@mui/material";
 import MyAppBar from "../components/MyAppBar";
-import MyAppDrawer from "../components/MyAppDrawer";
-import Todolist from "./todolist/Todolist"
+import { Outlet } from "react-router";
+import EnhancedTable from "../components/todolist/muiTable"
 
 export default function Home() {
    return (
-      <Box>
+      <Box >
          <MyAppBar />
-         <MyAppDrawer />
-         <Todolist />
+         <Toolbar />
+         <EnhancedTable />
+         {/* <Outlet /> */}
       </Box>
    );
 }
