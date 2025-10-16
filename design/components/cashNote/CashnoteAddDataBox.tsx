@@ -22,23 +22,23 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function CashnoteDialogBox() {
-   const {openCashnoteDialogBox, setOpenCashnoteDialogBox} = useCashContext();
+   const {openCashnoteAddDataBox, setOpenCashnoteAddDataBox} = useCashContext();
 
    return (
       <BootstrapDialog
-         onClose={() => setOpenCashnoteDialogBox(false)}
+         onClose={() => setOpenCashnoteAddDataBox(false)}
          aria-labelledby="customized-dialog-title"
-         open={openCashnoteDialogBox}
+         open={openCashnoteAddDataBox}
       >
          <DialogTitle
             sx={{ m: 0, p: 2, textAlign: "center" }}
             id="customized-dialog-title"
          >
-            Add New Cash Memo
+            Add New Cash Data
          </DialogTitle>
          <IconButton
             aria-label="close"
-            onClick={() => setOpenCashnoteDialogBox(false)}
+            onClick={() => setOpenCashnoteAddDataBox(false)}
             sx={(theme) => ({
                position: "absolute",
                right: 8,
@@ -58,7 +58,7 @@ export default function CashnoteDialogBox() {
             </form>
          </DialogContent>
          <DialogActions>
-            <Button autoFocus onClick={() => setOpenCashnoteDialogBox(false)}>
+            <Button autoFocus onClick={() => setOpenCashnoteAddDataBox(false)}>
                Save
             </Button>
          </DialogActions>

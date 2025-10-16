@@ -52,8 +52,8 @@ export default function AppProvider({
   const [openDialogBox, setOpenDialogBox] = useState(false);
   const [openAddNewTodolistDataBox, setOpenAddNewTodolistDataBox] =
     useState(false);
-  const [currentNote, setCurrentNote] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState<string | null>(null);
+  const [currentNote, setCurrentNote] = useState<string | null>(null); /// active note for left drawer for todolist
+  const [currentPage, setCurrentPage] = useState<string | null>(null); // from appbar [cash note, todolist, diary]
 
   const theme = useMemo(
     () =>
