@@ -18,8 +18,7 @@ import {
    type CashData,
    type Order,
 } from "../../pages/cashnote/CashnoteDataType.types";
-import CashnoteBottomToolbar from "./CashnoteBottomToolbar";
-
+import CashnoteCard from "./CashnoteCard";
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
    if (b[orderBy] < a[orderBy]) {
@@ -45,7 +44,7 @@ function getComparator<Key extends keyof any>(
 
 export default function CashnoteTable() {
    const [selected, setSelected] = useState<readonly number[]>([]);
-   const { rows, currentCashNote } = useCashContext();
+   const { rows, currentCashNote, cashType } = useCashContext();
    const [order, setOrder] = useState<Order>("asc");
    const [orderBy, setOrderBy] = useState<keyof CashData>("date");
    const [page, setPage] = useState(0);
@@ -53,12 +52,17 @@ export default function CashnoteTable() {
    const [showAllData, setShowAllData] = useState(false); // to show all data
    const [rowsPerPage, setRowsPerPage] = useState(5);
 
-   const rowDatas = useMemo (
-      () => 
-         rows.filter(row => row.cashnoteType === currentCashNote)
-      , [rows, currentCashNote]
-   )
-   
+   const rowDatas = useMemo(() => {
+      const datas = rows.filter((row) => row.cashnoteType === currentCashNote);
+
+      switch(cashType) {
+         case "CASH_IN" :  return datas.filter(data => data.type === "CASH_IN");
+         case "CASH_OUT" :  return datas.filter(data => data.type === "CASH_OUT");
+         default:
+            return datas;
+      }
+   }, [rows, currentCashNote, cashType]);
+
    const handleRequestSort = (
       event: React.MouseEvent<unknown>,
       property: keyof CashData
@@ -91,12 +95,13 @@ export default function CashnoteTable() {
       event: React.ChangeEvent<HTMLInputElement>
    ) => {
       if (event.target.checked) {
-         const newSelected = rows.map((n) => n.id);
+         const newSelected = rowDatas.map((n) => n.id);
          setSelected(newSelected);
          return;
       }
       setSelected([]);
    };
+
    const visibleRows = useMemo(
       () =>
          showAllData
@@ -104,7 +109,7 @@ export default function CashnoteTable() {
             : [...rowDatas]
                  .sort(getComparator(order, orderBy))
                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-      [order, orderBy, page, rowsPerPage, showAllData, currentCashNote]
+      [order, orderBy, page, rowsPerPage, showAllData, currentCashNote, cashType]
    );
 
    const handleChangePage = (event: unknown, newPage: number) => {
@@ -126,12 +131,11 @@ export default function CashnoteTable() {
    ) => {
       setShowAllData(event.target.checked);
    };
-   
+
    return (
       <Box sx={{ width: "100%" }}>
          <Paper sx={{ width: "100%" }}>
             <CashnoteToolbar noteSelected={selected.length} />
-            <CashnoteBottomToolbar noteSelected={selected.length} />
             <Toolbar />
             <TableContainer>
                <Table
@@ -185,7 +189,9 @@ export default function CashnoteTable() {
             }}
             label="Show All"
          />
+         <CashnoteCard />
          <Toolbar />
+         {/* for scroll button  */}
       </Box>
    );
 }

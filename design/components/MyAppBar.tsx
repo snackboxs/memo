@@ -110,11 +110,11 @@ export default function MyAppBar() {
                 borderRadius: 0,
                 textTransform: "none",
                 borderBottom:
-                  currentPage === "diary" ? "2px solid white" : "none",
+                  currentPage === "memo" ? "2px solid white" : "none",
               }}
               onClick={() => {
-                navigate("/diary");
-                setCurrentPage("diary");
+                navigate("/memo");
+                setCurrentPage("memo");
               }}
             >
               Diary

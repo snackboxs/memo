@@ -1,15 +1,11 @@
-import { Box, Fab } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material";
+import { Box } from "@mui/material";
 import CashnoteTable from "../../components/cashNote/CashnoteTable";
 import CashnoteLeftDrawer from "../../components/cashNote/CashnoteLeftDrawer";
 import CashnoteProvider from "./CashnoteProvider";
 import CashnoteAddDataBox from "../../components/cashNote/CashnoteAddDataBox";
-import { useCashContext } from "./CashnoteProvider";
+import FabIcon from "../../components/cashNote/FabIcon";
 
 export default function Cashnote() {
-   const { openCashnoteAddDataBox, setOpenCashnoteAddDataBox } =
-      useCashContext();
-      console.log(openCashnoteAddDataBox);
       
    return (
       <CashnoteProvider>
@@ -17,15 +13,7 @@ export default function Cashnote() {
             <CashnoteLeftDrawer />
             <CashnoteTable />
             <CashnoteAddDataBox />
-            <Fab
-               aria-label="add"
-               sx={{ position: "fixed", bottom: 70, right: 30 }}
-               onClick={() =>
-                  setOpenCashnoteAddDataBox(true)
-               }
-            >
-               <AddIcon />
-            </Fab>
+            <FabIcon />
          </Box>
       </CashnoteProvider>
    );

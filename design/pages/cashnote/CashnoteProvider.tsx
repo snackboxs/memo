@@ -54,6 +54,8 @@ const CashContext = createContext<CashContextType>({
    setCashnote: () => {},
    openCashnoteAddDataBox: false,
    setOpenCashnoteAddDataBox: () => {},
+   cashType: null,
+   setCashType: () => {},
 });
 
 export function useCashContext() {
@@ -73,6 +75,7 @@ export default function CashnoteProvider({
    const [openCashnoteDialogBox, setOpenCashnoteDialogBox] =
       useState<boolean>(false);
    const [openCashnoteAddDataBox, setOpenCashnoteAddDataBox] = useState<boolean>(false);
+   const [cashType, setCashType] = useState<string | null>(null)
    const contextValue: CashContextType = {
       rows,
       setRows,
@@ -84,6 +87,8 @@ export default function CashnoteProvider({
       setCashnote,
       openCashnoteAddDataBox,
       setOpenCashnoteAddDataBox,
+      cashType,
+      setCashType,
    };
    return (
       <CashContext.Provider value={contextValue}>

@@ -23,6 +23,8 @@ export interface CashContextType {
    setCashnote: Dispatch<SetStateAction<string[] | null>>;
    openCashnoteAddDataBox: boolean;
    setOpenCashnoteAddDataBox: Dispatch<SetStateAction<boolean>>;
+   cashType: string | null;
+   setCashType: Dispatch<SetStateAction<string | null>>;
 }
 
 export type Order = "asc" | "desc";

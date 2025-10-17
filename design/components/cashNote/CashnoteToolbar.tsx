@@ -31,7 +31,6 @@ export default function CashnoteToolbar(props: EnhancedTableToolbarProps) {
         },
         {
           position: "fixed",
-          backgroundColor: "white",
           width: "calc(100% - 240px)",
           zIndex: 1300,
         },
