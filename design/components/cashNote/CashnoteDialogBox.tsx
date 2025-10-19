@@ -34,7 +34,7 @@ export default function CashnoteDialogBox() {
             sx={{ m: 0, p: 2, textAlign: "center" }}
             id="customized-dialog-title"
          >
-            Add New Cash Memo
+            Add New Cash
          </DialogTitle>
          <IconButton
             aria-label="close"

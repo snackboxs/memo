@@ -7,19 +7,30 @@ import {
    DarkMode,
 } from "@mui/icons-material";
 import { useAppContext } from "../src/AppProvider";
+import { setMode } from "../src/features/counter/counterSlice";
+import { type RootState } from "../src/store";
 
 interface AccountMenuProps {
    accountAnchorEl: null | HTMLElement;
    handleCloseAccountMenu: () => void;
 }
+import { useSelector, useDispatch } from "react-redux";
+
 export default function AccountMenu({
    accountAnchorEl,
    handleCloseAccountMenu,
 }: AccountMenuProps) {
-   const { mode, setMode } = useAppContext();
-   if (!mode) {
-      return null;
-   }
+   // const { mode, setMode } = useAppContext();
+   // if (!mode) {
+   //    return null;
+   // }
+
+   const dispatch = useDispatch();
+   const currentMode = useSelector((state: RootState) => state.theme.themeMode);
+
+   const handleToggleMode = () => {
+      dispatch(setMode());
+   };
    return (
       <Menu
          anchorEl={accountAnchorEl}
@@ -68,7 +79,15 @@ export default function AccountMenu({
             </ListItemIcon>
             Add another account
          </MenuItem>
-         <MenuItem
+         <MenuItem onClick={handleToggleMode}>
+            <ListItemIcon>
+               {currentMode === "light" ? <DarkMode /> : <LightMode />}
+            </ListItemIcon>
+            {currentMode === "light" ? "Dark Mode" : "Light Mode"}
+         </MenuItem>
+
+         {/* useContext */}
+         {/* <MenuItem
             onClick={() =>
                mode === "light" ? setMode("dark") : setMode("light")
             }
@@ -77,7 +96,7 @@ export default function AccountMenu({
                {mode === "light" ? <DarkMode /> : <LightMode />}
             </ListItemIcon>
             {mode === "light" ? "Dark Mode" : "Light Mode"}
-         </MenuItem>
+         </MenuItem> */}
          <MenuItem onClick={handleCloseAccountMenu}>
             <ListItemIcon>
                <Settings fontSize="small" />

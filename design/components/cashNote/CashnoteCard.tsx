@@ -37,7 +37,7 @@ function CashnoteCard() {
          }}
       >
          {cards.map((card, index) => (
-            <Card>
+            <Card key={card.id}>
                <CardActionArea
                   onClick={() => {
                      setCashType(card.id);
