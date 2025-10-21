@@ -22,16 +22,14 @@ import { useTodolistContext } from "../../pages/todolist/TodolistProvider";
 export default function TodolistTable() {
    // const [finished, setFinished] = useState(rows);
    const { currentNote } = useAppContext();
-   const {rows, setRows} = useTodolistContext();
+   const { rows, setRows } = useTodolistContext();
 
    const remove = (id: number) => {
       setRows(() => rows.filter((row) => row.id !== id));
    };
    const toggle = (id: number) => {
       setRows(() =>
-         rows.map((row) =>
-            row.id === id ? { ...row, done: !row.done } : row
-         )
+         rows.map((row) => (row.id === id ? { ...row, done: !row.done } : row))
       );
    };
    const toggleAll = () => {
@@ -69,7 +67,10 @@ export default function TodolistTable() {
                   </TableHead>
                   <TableBody>
                      {rows
-                        .filter((rows) => rows.noteType === currentNote)
+                        .filter(
+                           (rows) =>
+                              rows.noteType.toLocaleLowerCase() === currentNote
+                        )
                         .filter((row) => !row.done)
                         .map((row) => {
                            return (
