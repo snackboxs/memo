@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router"
 import Home from "../pages/Home"
 import Todolist from "../pages/todolist/Todolist"
 import Cashnote from "../pages/cashnote/Cashnote"
+import Memo from "../pages/memo/Memo"
 
 export const router = createBrowserRouter([{
    path: "/",
@@ -16,8 +17,8 @@ export const router = createBrowserRouter([{
          Component: Cashnote
       },
       {
-         path: "diary",
-         Component: Todolist
+         path: "memo",
+         Component: Memo
       },
    ]
 }])

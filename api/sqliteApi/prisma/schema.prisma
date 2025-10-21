@@ -1,0 +1,21 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Data {
+  id                Int      @id @default(autoincrement())
+  universal_user_id String // နောက်ပိုင်း PostgreSQL ကနေလာမယ့် User Account ID ကို ဒီမှာသိမ်းပါမည်။
+  todolist          String
+  todolistType      String
+  doneList          Boolean
+  created           DateTime @default(now())
+}

@@ -4,13 +4,13 @@ import {
    DialogActions,
    DialogContent,
    IconButton,
-   Button, OutlinedInput,
-   styled
+   Button,
+   OutlinedInput,
+   styled,
 } from "@mui/material";
 
 import { Close as CloseIcon } from "@mui/icons-material";
-
-import { useAppContext } from "../../src/AppProvider";
+import { useCashContext } from "../../pages/cashnote/CashnoteProvider";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
    "& .MuiDialogContent-root": {
@@ -22,23 +22,23 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function CashnoteDialogBox() {
-   const { openDialogBox, setOpenDialogBox } = useAppContext();
+   const {openCashnoteDialogBox, setOpenCashnoteDialogBox} = useCashContext();
 
    return (
       <BootstrapDialog
-         onClose={() => setOpenDialogBox(false)}
+         onClose={() => setOpenCashnoteDialogBox(false)}
          aria-labelledby="customized-dialog-title"
-         open={openDialogBox}
+         open={openCashnoteDialogBox}
       >
          <DialogTitle
             sx={{ m: 0, p: 2, textAlign: "center" }}
             id="customized-dialog-title"
          >
-            Add New Memo
+            Add New Cash
          </DialogTitle>
          <IconButton
             aria-label="close"
-            onClick={() => setOpenDialogBox(false)}
+            onClick={() => setOpenCashnoteDialogBox(false)}
             sx={(theme) => ({
                position: "absolute",
                right: 8,
@@ -50,14 +50,15 @@ export default function CashnoteDialogBox() {
          </IconButton>
          <DialogContent dividers>
             <form>
-               <OutlinedInput 
-               multiline
-               sx={{ my: 2, width: 500 }}
-               placeholder="Enter Your Notes"/>
-            </form> 
+               <OutlinedInput
+                  multiline
+                  sx={{ my: 2, width: 500 }}
+                  placeholder="Enter Your Notes"
+               />
+            </form>
          </DialogContent>
          <DialogActions>
-            <Button autoFocus onClick={() => setOpenDialogBox(false)}>
+            <Button autoFocus onClick={() => setOpenCashnoteDialogBox(false)}>
                Save
             </Button>
          </DialogActions>

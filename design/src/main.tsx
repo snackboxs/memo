@@ -6,19 +6,13 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-// import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-
-// const theme = createTheme({
-//    palette: {
-//       mode: "dark",
-//    },
-// });
+import { store } from "./store.ts";
+import { Provider } from "react-redux";
 
 createRoot(document.getElementById("root")!).render(
    <StrictMode>
-      {/* <ThemeProvider theme={theme}> */}
+      <Provider store={store}>
          <App />
-         {/* <CssBaseline />
-      </ThemeProvider> */}
+      </Provider>
    </StrictMode>
 );
