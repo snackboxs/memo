@@ -42,6 +42,8 @@ export default function TodolistTable() {
    const removeAll = () => {
       setRows(rows.filter((row) => row.done === false));
    };
+   console.log(rows);
+   
    return (
       <Box sx={{ width: "100%" }}>
          <Paper>
@@ -69,7 +71,7 @@ export default function TodolistTable() {
                      {rows
                         .filter(
                            (rows) =>
-                              rows.noteType.toLocaleLowerCase() === currentNote
+                              rows.noteType === currentNote
                         )
                         .filter((row) => !row.done)
                         .map((row) => {

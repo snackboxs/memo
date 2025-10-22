@@ -14,7 +14,6 @@ import { Add as AddIcon } from "@mui/icons-material";
 import { useAppContext } from "../../src/AppProvider";
 import DialogBox from "./DialogBox";
 import { useTodolistContext } from "../../pages/todolist/TodolistProvider";
-import { log } from "console";
 
 export default function LeftDrawer() {
    const { setOpenDialogBox, setCurrentNote, currentNote } = useAppContext();
@@ -49,10 +48,10 @@ export default function LeftDrawer() {
                         <ListItem key={text} disablePadding>
                            <ListItemButton
                               onClick={() => {
-                                 setCurrentNote(text.toLocaleLowerCase());
+                                 setCurrentNote(text);
                                  console.log(currentNote);
                               }}
-                              selected={text.toLowerCase() === currentNote}
+                              selected={text === currentNote}
                            >
                               <ListItemText
                                  primary={text}

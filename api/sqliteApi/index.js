@@ -12,15 +12,50 @@ const prisma = new PrismaClient();
 const MAX_LIMIT = 20;
 
 app.get("/datas", async (req, res) => {
-   const page = parseInt(req.query.page) || 1;
-   let requestedLimit = parseInt(req.query.limit) || 20;
-   const limit = requestedLimit > MAX_LIMIT ? MAX_LIMIT : requestedLimit;
-
-   const skip = (page - 1) * limit;
-
-   const list = await prisma.data.findMany({ skip: skip, take: limit });
+   const keyword = req.query.keyword;
+   const list = await prisma.data.findMany({where: {todolistType: keyword}});
 
    return res.json(list);
 });
 
+app.get("/notetypes", async (req, res) => {
+   try {
+      const uniqueTypes = await prisma.data.findMany({
+         select: {
+            todolistType: true,
+         },
+         distinct: ["todolistType"],
+         orderBy: { todolistType: "asc" },
+      });
+      const noteTypesList = uniqueTypes.map((item) => item.todolistType);
+      return res.json(noteTypesList);
+   } catch (error) {
+      console.error("Error fetching unique note types:", error);
+      // Server-side error 
+      return res.status(500).json({ error: "Failed to fetch note types" });
+   }
+});
+
 app.listen(8800, () => console.log("Server is running at port 8800"));
+
+
+
+
+
+
+
+
+
+
+
+// app.get("/datas", async (req, res) => {
+//    const page = parseInt(req.query.page) || 1;
+//    let requestedLimit = parseInt(req.query.limit) || 20;
+//    const limit = requestedLimit > MAX_LIMIT ? MAX_LIMIT : requestedLimit;
+
+//    const skip = (page - 1) * limit;
+
+//    const list = await prisma.data.findMany({ skip: skip, take: limit });
+
+//    return res.json(list);
+// });
