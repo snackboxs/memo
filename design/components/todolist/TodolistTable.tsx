@@ -22,15 +22,10 @@ import { useTodolistContext } from "../../pages/todolist/TodolistProvider";
 export default function TodolistTable() {
    // const [finished, setFinished] = useState(rows);
    const { currentNote } = useAppContext();
-   const { rows, setRows } = useTodolistContext();
+   const { rows, setRows, toggleTodo } = useTodolistContext();
 
    const remove = (id: number) => {
       setRows(() => rows.filter((row) => row.id !== id));
-   };
-   const toggle = (id: number) => {
-      setRows(() =>
-         rows.map((row) => (row.id === id ? { ...row, done: !row.done } : row))
-      );
    };
    const toggleAll = () => {
       setRows(
@@ -42,8 +37,7 @@ export default function TodolistTable() {
    const removeAll = () => {
       setRows(rows.filter((row) => row.done === false));
    };
-   console.log(rows);
-   
+
    return (
       <Box sx={{ width: "100%" }}>
          <Paper>
@@ -53,7 +47,7 @@ export default function TodolistTable() {
                      <TableRow>
                         <TableCell padding="checkbox">
                            <IconButton onClick={() => toggleAll()}>
-                              <CheckBoxOutlineBlank />
+                              <CheckBoxOutlineBlank sx={{color: "green"}}/>
                            </IconButton>
                         </TableCell>
                         <TableCell sx={{ textAlign: "center" }}>
@@ -62,17 +56,14 @@ export default function TodolistTable() {
                         <TableCell sx={{ textAlign: "center" }}>Time</TableCell>
                         <TableCell padding="checkbox">
                            <IconButton onClick={() => removeAll()}>
-                              <DeleteIcon />
+                              <DeleteIcon color="error"/>
                            </IconButton>
                         </TableCell>
                      </TableRow>
                   </TableHead>
                   <TableBody>
                      {rows
-                        .filter(
-                           (rows) =>
-                              rows.noteType === currentNote
-                        )
+                        .filter((rows) => rows.noteType === currentNote)
                         .filter((row) => !row.done)
                         .map((row) => {
                            return (
@@ -81,10 +72,10 @@ export default function TodolistTable() {
                                     <IconButton
                                        onClick={(e) => {
                                           e.stopPropagation(); // prevent row click
-                                          toggle(row.id);
+                                          toggleTodo(row.id, row.done);
                                        }}
                                     >
-                                       <CheckBoxOutlineBlank />
+                                       <CheckBoxOutlineBlank sx={{color: "green"}}/>
                                     </IconButton>
                                  </TableCell>
                                  <TableCell>{row.note}</TableCell>
@@ -93,7 +84,7 @@ export default function TodolistTable() {
                                  </TableCell>
                                  <TableCell padding="checkbox">
                                     <IconButton onClick={() => remove(row.id)}>
-                                       <DeleteIcon />
+                                       <DeleteIcon color="error"/>
                                     </IconButton>
                                  </TableCell>
                               </TableRow>
@@ -119,14 +110,13 @@ export default function TodolistTable() {
                            sx={{
                               backgroundColor: "inherit",
                            }}
-                           // onClick={() => toggle(row.id)}
                         >
                            <TableCell padding="checkbox">
                               <IconButton
                                  sx={{ color: "gray" }}
                                  onClick={(e) => {
                                     e.stopPropagation(); // prevent row click
-                                    toggle(row.id);
+                                    toggleTodo(row.id, row.done);
                                  }}
                               >
                                  <CheckBox />

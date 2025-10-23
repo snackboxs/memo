@@ -49,7 +49,6 @@ export default function LeftDrawer() {
                            <ListItemButton
                               onClick={() => {
                                  setCurrentNote(text);
-                                 console.log(currentNote);
                               }}
                               selected={text === currentNote}
                            >

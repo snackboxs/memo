@@ -13,7 +13,9 @@ const MAX_LIMIT = 20;
 
 app.get("/datas", async (req, res) => {
    const keyword = req.query.keyword;
-   const list = await prisma.data.findMany({where: {todolistType: keyword}});
+   const list = await prisma.data.findMany({
+      where: { todolistType: keyword },
+   });
 
    return res.json(list);
 });
@@ -31,22 +33,37 @@ app.get("/notetypes", async (req, res) => {
       return res.json(noteTypesList);
    } catch (error) {
       console.error("Error fetching unique note types:", error);
-      // Server-side error 
+      // Server-side error
       return res.status(500).json({ error: "Failed to fetch note types" });
    }
 });
 
+app.patch("/datas/:id", async (req, res) => {
+   const { id } = req.params;
+   const { doneList } = req.body;
+
+   if (typeof doneList !== "boolean") {
+      return res
+         .status(400)
+         .json({ error: "Invalid 'doneList' status provided." });
+   }
+   try {
+      const updatedItem = await prisma.data.update({
+         where: {
+            id: parseInt(id),
+         },
+         data: {
+            doneList: doneList,
+         },
+      });
+      return res.json(updatedItem);
+   } catch (err) {
+      console.log(`Error updating todo item ${id}:`, err);
+      return res.status(500).json({ error: "Failed to update todo item." });
+   }
+});
+
 app.listen(8800, () => console.log("Server is running at port 8800"));
-
-
-
-
-
-
-
-
-
-
 
 // app.get("/datas", async (req, res) => {
 //    const page = parseInt(req.query.page) || 1;
