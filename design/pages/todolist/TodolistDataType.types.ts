@@ -22,4 +22,6 @@ export interface TodoListContextType {
    noteList: string[] | null;
    setNoteList: Dispatch<SetStateAction<string[] | null>>;
    toggleTodo: (id: number, currentDoneStatus: boolean) => Promise<void>;
+   // load: boolean;
+   // setLoad: Dispatch<SetStateAction<boolean>>;
 }

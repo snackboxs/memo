@@ -2,12 +2,12 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAppContext } from "../../src/AppProvider";
 import {
-   TodoListContextType,
-   Data,
-   BackendData,
+   type TodoListContextType,
+   type Data,
+   type BackendData,
 } from "./TodolistDataType.types";
 
-import ToggleDoneApi from "./ToggleDoneApi";
+import { ToggleDoneApi } from "./TodoApiCall";
 
 const TodoListContext = createContext<TodoListContextType>({
    rows: [],
@@ -45,7 +45,7 @@ export default function TodolistProvider({
 }) {
    const [rows, setRows] = useState<Data[]>([]);
    const [noteList, setNoteList] = useState<string[] | null>(null);
-
+   // const [load, setLoad] = useState(false);
    const { currentNote } = useAppContext();
 
    const queryClient = useQueryClient();
@@ -76,11 +76,9 @@ export default function TodolistProvider({
    });
 
    const toggleTodo = async (id: number, currentDoneStatus: boolean) => {
+      // setLoad(true)
       try {
-         console.log(currentDoneStatus);
-
-         await ToggleDoneApi(id, !currentDoneStatus);
-         queryClient.invalidateQueries({ queryKey: ["todoDatas"] });
+         const fetchData = await ToggleDoneApi(id, !currentDoneStatus, queryClient);
       } catch (err) {
          console.error(
             "Toggle failed and rollback or user notification needed:",
@@ -105,7 +103,13 @@ export default function TodolistProvider({
 
    return (
       <TodoListContext.Provider
-         value={{ rows, setRows, noteList, setNoteList, toggleTodo }}
+         value={{
+            rows,
+            setRows,
+            noteList,
+            setNoteList,
+            toggleTodo,
+         }}
       >
          {children}
       </TodoListContext.Provider>

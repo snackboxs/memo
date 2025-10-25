@@ -30,7 +30,10 @@ app.get("/notetypes", async (req, res) => {
          orderBy: { todolistType: "asc" },
       });
       const noteTypesList = uniqueTypes.map((item) => item.todolistType);
-      return res.json(noteTypesList);
+      
+      setTimeout(() => {
+         return res.json(noteTypesList);
+      }, 500);
    } catch (error) {
       console.error("Error fetching unique note types:", error);
       // Server-side error
@@ -56,10 +59,29 @@ app.patch("/datas/:id", async (req, res) => {
             doneList: doneList,
          },
       });
-      return res.json(updatedItem);
+      setTimeout(() => {
+         return res.status(200).json(updatedItem);
+      }, 500);
    } catch (err) {
       console.log(`Error updating todo item ${id}:`, err);
       return res.status(500).json({ error: "Failed to update todo item." });
+   }
+});
+
+app.delete("/datas/:id", async (req, res) => {
+   const { id } = req.params;
+   try {
+      const deletedItem = await prisma.data.delete({
+         where: {
+            id: parseInt(id),
+         },
+      });
+      setTimeout(() => {
+         return res.status(200).json(deletedItem);
+      }, 500);
+   } catch (err) {
+      console.log("Error deleting todo item", err);
+      return res.status(500).json({ error: "Failed to delete todo item" });
    }
 });
 

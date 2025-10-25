@@ -10,6 +10,7 @@ import {
    IconButton,
    Divider,
    Typography,
+   CircularProgress,
 } from "@mui/material";
 import {
    Delete as DeleteIcon,
@@ -18,11 +19,16 @@ import {
 } from "@mui/icons-material";
 import { useAppContext } from "../../src/AppProvider";
 import { useTodolistContext } from "../../pages/todolist/TodolistProvider";
+import { useState } from "react";
+import { ToggleDeleteApi } from "../../pages/todolist/TodoApiCall";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function TodolistTable() {
-   // const [finished, setFinished] = useState(rows);
    const { currentNote } = useAppContext();
    const { rows, setRows, toggleTodo } = useTodolistContext();
+   const [loadingId, setLoadingId] = useState<number | null>(null);
+   const [delLoadingId, setDeleteLoadingId] = useState<number | null>(null);
+   const queryClient = useQueryClient();
 
    const remove = (id: number) => {
       setRows(() => rows.filter((row) => row.id !== id));
@@ -38,6 +44,17 @@ export default function TodolistTable() {
       setRows(rows.filter((row) => row.done === false));
    };
 
+   const handleToggle = async (id: number, done: boolean) => {
+      setLoadingId(id);
+      await toggleTodo(id, done);
+      setLoadingId(null);
+   };
+
+   const handleToggleDelete = async (id: number) => {
+      setDeleteLoadingId(id);
+      await ToggleDeleteApi(id, queryClient);
+      setDeleteLoadingId(null);
+   };
    return (
       <Box sx={{ width: "100%" }}>
          <Paper>
@@ -47,7 +64,7 @@ export default function TodolistTable() {
                      <TableRow>
                         <TableCell padding="checkbox">
                            <IconButton onClick={() => toggleAll()}>
-                              <CheckBoxOutlineBlank sx={{color: "green"}}/>
+                              <CheckBoxOutlineBlank sx={{ color: "green" }} />
                            </IconButton>
                         </TableCell>
                         <TableCell sx={{ textAlign: "center" }}>
@@ -56,7 +73,7 @@ export default function TodolistTable() {
                         <TableCell sx={{ textAlign: "center" }}>Time</TableCell>
                         <TableCell padding="checkbox">
                            <IconButton onClick={() => removeAll()}>
-                              <DeleteIcon color="error"/>
+                              <DeleteIcon color="error" />
                            </IconButton>
                         </TableCell>
                      </TableRow>
@@ -72,10 +89,19 @@ export default function TodolistTable() {
                                     <IconButton
                                        onClick={(e) => {
                                           e.stopPropagation(); // prevent row click
-                                          toggleTodo(row.id, row.done);
+                                          handleToggle(row.id, row.done);
                                        }}
                                     >
-                                       <CheckBoxOutlineBlank sx={{color: "green"}}/>
+                                       {loadingId === row.id ? (
+                                          <CircularProgress
+                                             size="20px"
+                                             sx={{ color: "green" }}
+                                          />
+                                       ) : (
+                                          <CheckBoxOutlineBlank
+                                             sx={{ color: "green" }}
+                                          />
+                                       )}
                                     </IconButton>
                                  </TableCell>
                                  <TableCell>{row.note}</TableCell>
@@ -83,8 +109,19 @@ export default function TodolistTable() {
                                     {row.date}
                                  </TableCell>
                                  <TableCell padding="checkbox">
-                                    <IconButton onClick={() => remove(row.id)}>
-                                       <DeleteIcon color="error"/>
+                                    <IconButton
+                                       onClick={() =>
+                                          handleToggleDelete(row.id)
+                                       }
+                                    >
+                                       {delLoadingId === row.id ? (
+                                          <CircularProgress
+                                             size="20px"
+                                             sx={{ color: "red" }}
+                                          />
+                                       ) : (
+                                          <DeleteIcon color="error" />
+                                       )}
                                     </IconButton>
                                  </TableCell>
                               </TableRow>
@@ -94,6 +131,7 @@ export default function TodolistTable() {
                </Table>
             </TableContainer>
          </Paper>
+
          <Typography sx={{ marginTop: 10, paddingLeft: 1, color: "gray" }}>
             Done
          </Typography>
@@ -116,10 +154,17 @@ export default function TodolistTable() {
                                  sx={{ color: "gray" }}
                                  onClick={(e) => {
                                     e.stopPropagation(); // prevent row click
-                                    toggleTodo(row.id, row.done);
+                                    handleToggle(row.id, row.done);
                                  }}
                               >
-                                 <CheckBox />
+                                 {loadingId === row.id ? (
+                                    <CircularProgress
+                                       size="20px"
+                                       sx={{ color: "inherit" }}
+                                    />
+                                 ) : (
+                                    <CheckBox />
+                                 )}
                               </IconButton>
                            </TableCell>
                            <TableCell sx={{ color: "gray" }}>
@@ -133,9 +178,16 @@ export default function TodolistTable() {
                            <TableCell padding="checkbox">
                               <IconButton
                                  sx={{ color: "gray" }}
-                                 onClick={() => remove(row.id)}
+                                 onClick={() => handleToggleDelete(row.id)}
                               >
-                                 <DeleteIcon />
+                                 {delLoadingId === row.id ? (
+                                    <CircularProgress
+                                       size="20px"
+                                       sx={{ color: "red" }}
+                                    />
+                                 ) : (
+                                    <DeleteIcon color="error" />
+                                 )}
                               </IconButton>
                            </TableCell>
                         </TableRow>
