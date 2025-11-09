@@ -25,7 +25,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 export default function TodolistTable() {
    const { currentNote } = useAppContext();
-   const { rows, setRows, toggleTodo } = useTodolistContext();
+   const { rows, setRows, toggleTodo, isLoading, error } = useTodolistContext();
    const [loadingId, setLoadingId] = useState<number | null>(null);
    const [delLoadingId, setDeleteLoadingId] = useState<number | null>(null);
    const queryClient = useQueryClient();
@@ -55,6 +55,14 @@ export default function TodolistTable() {
       await ToggleDeleteApi(id, queryClient);
       setDeleteLoadingId(null);
    };
+
+   if (isLoading) {
+      return <Box>{isLoading}</Box>;
+   }
+
+   if (error) {
+      return <Box>{error.message}</Box>;
+   }
    return (
       <Box sx={{ width: "100%" }}>
          <Paper>

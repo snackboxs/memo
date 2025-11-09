@@ -16,12 +16,19 @@ export interface BackendData {
    universal_user_id: string; //
 }
 
+export interface ApiError {
+    message: string;
+    code?: number; // Example custom property
+}
+
 export interface TodoListContextType {
    rows: Data[];
    setRows: Dispatch<SetStateAction<Data[]>>;
    noteList: string[] | null;
    setNoteList: Dispatch<SetStateAction<string[] | null>>;
    toggleTodo: (id: number, currentDoneStatus: boolean) => Promise<void>;
+   isLoading: boolean;
+   error: ApiError | null;
    // load: boolean;
    // setLoad: Dispatch<SetStateAction<boolean>>;
 }

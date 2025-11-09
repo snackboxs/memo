@@ -15,6 +15,8 @@ const TodoListContext = createContext<TodoListContextType>({
    noteList: null,
    setNoteList: () => {},
    toggleTodo: async () => {},
+   isLoading: true,
+   error: null,
 });
 
 export function useTodolistContext() {
@@ -45,26 +47,22 @@ export default function TodolistProvider({
 }) {
    const [rows, setRows] = useState<Data[]>([]);
    const [noteList, setNoteList] = useState<string[] | null>(null);
-   // const [load, setLoad] = useState(false);
    const { currentNote } = useAppContext();
 
    const queryClient = useQueryClient();
 
+   const { data: fetchedNoteList } = useQuery<string[]>({
+      queryKey: ["noteTypes"],
+      queryFn: async () => {
+         const res = await fetch(`${api}/notetypes`);
+         if (!res.ok) throw new Error("Something wrong");
+         return res.json(); // ✅ data return
+      },
+   });
+
    useEffect(() => {
-      fetch(`${api}/notetypes`)
-         .then(async (res) => {
-            if (!res.ok) {
-               throw new Error("Something wrong");
-            }
-            return res.json();
-         })
-         .then((fetchData: string[]) => {
-            setNoteList(fetchData);
-         })
-         .catch((error) => {
-            console.error("Data fetching failed:", error);
-         });
-   }, []);
+      if (fetchedNoteList) setNoteList(fetchedNoteList);
+   }, [fetchedNoteList]);
 
    const {
       data: fetchedBackendData,
@@ -78,7 +76,11 @@ export default function TodolistProvider({
    const toggleTodo = async (id: number, currentDoneStatus: boolean) => {
       // setLoad(true)
       try {
-         const fetchData = await ToggleDoneApi(id, !currentDoneStatus, queryClient);
+         const fetchData = await ToggleDoneApi(
+            id,
+            !currentDoneStatus,
+            queryClient
+         );
       } catch (err) {
          console.error(
             "Toggle failed and rollback or user notification needed:",
@@ -101,6 +103,9 @@ export default function TodolistProvider({
       }
    }, [fetchedBackendData]);
 
+   console.log("loading is = " + typeof(isLoading));
+   console.log("error = " + error);
+   
    return (
       <TodoListContext.Provider
          value={{
@@ -109,6 +114,8 @@ export default function TodolistProvider({
             noteList,
             setNoteList,
             toggleTodo,
+            isLoading,
+            error,
          }}
       >
          {children}
